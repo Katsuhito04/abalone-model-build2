@@ -5,6 +5,7 @@ import os
 import pathlib
 import requests
 import tempfile
+import time
 
 import boto3
 import numpy as np
