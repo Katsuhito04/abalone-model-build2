@@ -138,18 +138,38 @@ if __name__ == "__main__":
         {'FeatureName': 'EventTime', 'FeatureType': 'Fractional'}
     ]
 
-    feature_group_name = 'case-feature-group'
+    feature_group_name = 'case-feature-group-off'
     record_identifier_name = 'sex'
     event_time_name = 'EventTime'
     feature_description = "feature group for new items of Animation genre"
     
 
     sagemaker_client = boto3.client("sagemaker", region_name="us-east-1")
+    featurestore_runtime = boto_session.client(service_name='sagemaker-featurestore-runtime', region_name="us-east-1")
     sagemaker_client.create_feature_group(
             FeatureGroupName = feature_group_name,
             RecordIdentifierFeatureName = record_identifier_name,
             EventTimeFeatureName = event_time_name,
             FeatureDefinitions = feature_definition,
             Description = feature_description,
-            OnlineStoreConfig = {'EnableOnlineStore': True},
+            OfflineStoreConfig = {"S3StorageConfig" : "s3://case172774495900973/"},
             RoleArn = role)
+    
+    for label in df_fs.columns:
+        if df_fs.dtypes[label] == 'object':
+            df_fs[label] = df_fs[label].astype("str").astype("string")
+
+    featurestore_runtime.put_record(
+        FeatureGroupName=feature_group_name,
+        Record=[
+            {'FeatureName': 'sex', 'ValueAsString': 'String'},
+            {'FeatureName': 'length', 'ValueAsString': '11'},
+            {'FeatureName': 'diameter', 'ValueAsString': '11'},
+            {'FeatureName': 'height', 'ValueAsString': '11'},
+            {'FeatureName': 'whole_weight', 'ValueAsString': '11'},
+            {'FeatureName': 'shucked_weight', 'ValueAsString': '11'},
+            {'FeatureName': 'viscera_weight', 'ValueAsString': '11'},
+            {'FeatureName': 'shell_weight', 'ValueAsString': '11'},
+            {'FeatureName': 'EventTime', 'ValueAsString': '11'}
+        ]
+    )
