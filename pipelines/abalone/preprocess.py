@@ -143,7 +143,7 @@ if __name__ == "__main__":
     feature_description = "feature group for new items of Animation genre"
     
 
-    sagemaker_client = boto3.client("sagemaker", region_name="ap-northeast-1")
+    sagemaker_client = boto3.client("sagemaker", region_name="us-east-1")
     sagemaker_client.create_feature_group(
             FeatureGroupName = feature_group_name,
             RecordIdentifierFeatureName = record_identifier_name,
