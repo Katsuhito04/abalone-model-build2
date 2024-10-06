@@ -118,3 +118,37 @@ if __name__ == "__main__":
         f"{base_dir}/validation/validation.csv", header=False, index=False
     )
     pd.DataFrame(test).to_csv(f"{base_dir}/test/test.csv", header=False, index=False)
+
+    current_time_sec = int(round(time.time()))
+    event_time_feature_name = "EventTime"
+    df_fs = df.copy()
+    df_fs[event_time_feature_name] = pd.Series([current_time_sec]*len(df_fs), dtype="float64")
+    role = "arn:aws:iam::713931074333:role/service-role/AmazonSageMaker-ExecutionRole-20241006T170081"
+
+    feature_definition = [
+        {'FeatureName': 'sex', 'FeatureType': 'String'},
+        {'FeatureName': 'length', 'FeatureType': 'Fractional'},
+        {'FeatureName': 'diameter', 'FeatureType': 'Fractional'},
+        {'FeatureName': 'height', 'FeatureType': 'Fractional'},
+        {'FeatureName': 'whole_weight', 'FeatureType': 'Fractional'},
+        {'FeatureName': 'shucked_weight', 'FeatureType': 'Fractional'},
+        {'FeatureName': 'viscera_weight', 'FeatureType': 'Fractional'},
+        {'FeatureName': 'shell_weight', 'FeatureType': 'Fractional'},
+        {'FeatureName': 'EventTime', 'FeatureType': 'Fractional'}
+    ]
+
+    feature_group_name = 'case-feature-group'
+    record_identifier_name = 'sex'
+    event_time_name = 'EventTime'
+    feature_description = "feature group for new items of Animation genre"
+    
+
+    sagemaker_client = boto3.client("sagemaker", region_name="ap-northeast-1")
+    sagemaker_client.create_feature_group(
+            FeatureGroupName = feature_group_name,
+            RecordIdentifierFeatureName = record_identifier_name,
+            EventTimeFeatureName = event_time_name,
+            FeatureDefinitions = feature_definition,
+            Description = feature_description,
+            OnlineStoreConfig = {'EnableOnlineStore': True},
+            RoleArn = role)
