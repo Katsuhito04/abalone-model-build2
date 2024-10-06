@@ -159,6 +159,8 @@ if __name__ == "__main__":
         if df_fs.dtypes[label] == 'object':
             df_fs[label] = df_fs[label].astype("str").astype("string")
 
+    time.sleep(60)
+
     featurestore_runtime.put_record(
         FeatureGroupName=feature_group_name,
         Record=[
