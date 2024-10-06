@@ -145,7 +145,7 @@ if __name__ == "__main__":
     
 
     sagemaker_client = boto3.client("sagemaker", region_name="us-east-1")
-    featurestore_runtime = boto_session.client(service_name='sagemaker-featurestore-runtime', region_name="us-east-1")
+    featurestore_runtime = boto3.client(service_name='sagemaker-featurestore-runtime', region_name="us-east-1")
     sagemaker_client.create_feature_group(
             FeatureGroupName = feature_group_name,
             RecordIdentifierFeatureName = record_identifier_name,
