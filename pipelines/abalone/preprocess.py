@@ -152,7 +152,7 @@ if __name__ == "__main__":
             EventTimeFeatureName = event_time_name,
             FeatureDefinitions = feature_definition,
             Description = feature_description,
-            OfflineStoreConfig = {"S3StorageConfig" : "s3://case172774495900973/"},
+            OfflineStoreConfig = {"S3StorageConfig" : {"S3Uri" :"s3://case172774495900973/"}},
             RoleArn = role)
     
     for label in df_fs.columns:
